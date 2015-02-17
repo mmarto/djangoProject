@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block body_block %}
+{% if user.is_authenticated %}
+<h1>Reports Viewer says... hello {{ user.username }}</h1>
+{% else %}
+<h1>Reports Viewer says... hello world</h1>
+{% endif %}
+<p>visits: {{ visits }}</p>
+{% if categories %}
+    <ul>
+        {% for category in categories %}
+            <li><a href="{% url 'category'  category.slug %}">{{ category.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <strong>There are no categories present.</strong>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Reports Viewer - {% block title %}A System for Distributing and Viewing Reports{% endblock %}</title>
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/login.css' %}" rel="stylesheet">
+
+    </head>
+    <body>
+
+    <div class="container">
+
+        <form id="login_form" role="form" class="form-login" method="post" action="{% url 'login' %}">
+            <h2>Login to Reports Viewer</h2>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" value="" class="form-control" id="username" />
+            </div>
+            <div class="form-group">
+                <label for="username">Password:</label> 
+                <input type="password" name="password" value="" class="form-control" id="password" />
+            </div>
+
+            <input type="submit" value="submit" class="btn btn-default" />
+        </form>
+    </div>
+</body>
+</html>
+

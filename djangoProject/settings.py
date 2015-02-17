@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
+
+REPORTS_DIR = os.path.join(os.environ['HOME'], 'ibcs', 'data', 'reportsViewer')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -87,3 +90,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_PATH = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = (
+    STATIC_PATH,
+)
+
+TEMPLATE_DIRS = (
+    TEMPLATE_PATH,
+)
+
+EMAIL_HOST = 'smail100'
+
+EMAIL_PORT = 25
+
+EMAIL_HOST_USER = 'mhristov'
+
+EMAIL_HOST_PASSWORD = ''

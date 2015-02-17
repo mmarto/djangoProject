@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+{% load reportsViewer_extras %}
+
+{% block title  %}{{ report.title }}{% endblock %}
+
+{% block body_block %}
+    <h1>Report Details</h1>
+    <br />
+    {% if report %}
+        <table class="table">
+        <tr><td>Title</td><td>{{ report.title }}</td></tr>
+        <tr><td>Filename</td><td><a href="{% url 'download_report' report.id %}">{{ report.path|basename }}</a></td></tr>
+        <tr><td>Category</td><td>{{ report.category }}</td></tr>
+        <tr><td>Comment</td><td>{{ report.comment }}</td></tr>
+        <tr><td>Published date</td><td>{{ report.pub_date}}</td></tr>
+        <tr><td>Size</td><td>{{ report.size|filesizeformat}}</td></tr>
+        <tr><td>Type</td><td>{{ report.get_type_display}}</td></tr>
+        <tr><td>Creator</td><td>{{ report.creator}}</td></tr>
+        </table>
+        <a href="{% url 'archive_report' report.id %}">Archive</a>
+    {% else %}
+        The specified report does not exist!
+    {% endif %}
+{% endblock %}
