@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+{% load reportsViewer_extras %}
+
+{% block title  %}{{ 'Realtime Reports' }}{{ category_name }}{% endblock %}
+
+{% block body_block %}
+    <ol class='breadcrumb'>
+        <li><a hrer='{% url 'index' %}'>Home</a></li>
+        <li><a hrer='{% url 'realtime_reports' %}'>Realtime Report Generation</a></li>
+        <li class='active'>{{ category_name }}</li>
+    </ol>
+    <h3>{{ category_name }}</h3>
+        {% if category %}
+            {% if reports %}
+            <table class='table table-bordered'>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Filename</th>
+                    <th>Publish Date</th>
+                    <th>Creator</th>
+                    <th class='text-center'>Actions</th>
+                </tr>
+                {% for report in reports %}
+                {% comment %}<li><a href="{% url 'report' report.id %}">{{ report.title }}</a></li>{% endcomment %}
+                <tr>
+                    <td>{{ report.id }}</td>
+                    <td><a href="{% url 'generate_report' report.id %}">{{ report.title }}</a></td>
+                    <td>{{ report.path|basename }}</td>
+                    <td>{{ report.pub_date }}</td>
+                    <td>{{ report.creator }}</td>
+                    <td class='text-center'>
+                        <a href='{% url 'generate_report' report.id %}' class='btn'><i class='glyphicon glyphicon-download-alt'></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                <strong>No reports currently in category.</strong>
+            {% endif %}
+        {% else %}
+            The specified category {{ category_name }} does not exist!
+        {% endif %}
+{% endblock %}

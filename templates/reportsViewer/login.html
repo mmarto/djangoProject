@@ -17,8 +17,11 @@
     <body>
 
     <div class="container">
-
+    {% if next %}
+       <form id="login_form" role="form" class="form-login" method="post" action="{% url 'login' %}?next={{ next }}">
+    {% else%}
         <form id="login_form" role="form" class="form-login" method="post" action="{% url 'login' %}">
+    {% endif %}
             <h2>Login to Reports Viewer</h2>
             {% csrf_token %}
             <div class="form-group">

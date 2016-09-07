@@ -3,26 +3,26 @@
 {% load staticfiles %}
 {% load reportsViewer_extras %}
 
-{% block title  %}{{ report.title }}{% endblock %}
+{% block title  %}{{ 'Archive' }}{{ report.title }}{% endblock %}
 
 {% block body_block %}
     <ol class='breadcrumb'>
         <li><a hrer='{% url 'index' %}'>Home</a></li>
+        <li><a hrer='{% url 'archive' %}'>Archive</a></li>
         <li><a  hrer='{% url 'category' report.category.slug %}'>{{ report.category.name}}</a></li>
         <li class='active'>{{ report.title }}</li>
     </ol>
-    <h3>Report Details</h3>
+    <h3>Archived Report Details</h3>
     <br />
     <div>
-        <a href='{% url 'download_report' report.id %}' class='btn'><i class='glyphicon glyphicon-download-alt'></i> Download</a>
-        <a href='{% url 'archive_report' report.id %}' class='btn'><i class='glyphicon glyphicon-compressed'></i> Archive</a>
-        <a href='{% url 'delete_report' report.id %}' class='btn'><i class='glyphicon glyphicon-trash'></i> Delete</a>
+        <a href='{% url 'download_report_archive' report.id %}' class='btn'><i class='glyphicon glyphicon-download-alt'></i> Download</a>
+        <a href='{% url 'delete_report_archive' report.id %}' class='btn'><i class='glyphicon glyphicon-trash'></i> Delete</a>
     </div>
     <br />
     {% if report %}
         <table class="table">
         <tr><td>Title</td><td>{{ report.title }}</td></tr>
-        <tr><td>Filename</td><td><a href="{% url 'download_report' report.id %}">{{ report.path|basename }}</a></td></tr>
+        <tr><td>Filename</td><td><a href="{% url 'download_report_archive' report.id %}">{{ report.path|basename }}</a></td></tr>
         <tr><td>Category</td><td>{{ report.category }}</td></tr>
         <tr><td>Comment</td><td>{{ report.comment|safe }}</td></tr>
         <tr><td>Published date</td><td>{{ report.pub_date}}</td></tr>

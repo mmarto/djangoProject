@@ -10,6 +10,10 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+
+TEMPLATE_CONTEXT_PROCESSORS += ("django.core.context_processors.request",)
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
@@ -29,6 +33,11 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTHENTICATION_BACKENDS = (
+    #'reportsViewer.backends.ImapCustomBackend.ImapCustomBackend',
+    'reportsViewer.backends.IBWebCustomBackend.IBWebCustomBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 # Application definition
 
@@ -39,6 +48,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'south',
     'reportsViewer',
 )
 
@@ -64,7 +74,7 @@ DATABASES = {
         # 'ENGINE': 'django.db.backends.sqlite3',
         'ENGINE': 'django.db.backends.oracle',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'NAME': 'ibcust1.dev',
+        'NAME': 'ibcust.dev2',
         'HOST': '',
         'PORT': '',
         'USER': 'ibreporter',

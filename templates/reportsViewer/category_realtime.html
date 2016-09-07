@@ -11,7 +11,6 @@
         <li class='active'>{{ category_name }}</a></li>
     </ol>
     <!-- <h3>{{ category_name }}</h3> -->
-    <a href='{% url 'category_archive' category.slug %}' class='btn'><i class='glyphicon glyphicon-compressed'></i> Go to archive</a>
         {% if category %}
             {% if reports %}
             <table class='table table-bordered'>
@@ -27,15 +26,14 @@
                 {% comment %}<li><a href="{% url 'report' report.id %}">{{ report.title }}</a></li>{% endcomment %}
                 <tr>
                     <td>{{ report.id }}</td>
-                    <td><a href="{% url 'report' report.id %}">{{ report.title }}</a></td>
+                    <td><a href="{% url 'report_realtime' report.id %}">{{ report.title }}</a></td>
                     <td>{{ report.path|basename }}</td>
                     <td>{{ report.pub_date }}</td>
                     <td>{{ report.creator }}</td>
                     <td class='text-center'>
-                        <a href='{% url 'report' report.id %}' class='btn'><i class='glyphicon glyphicon-info-sign'></i></a>
-                        <a href='{% url 'download_report' report.id %}' class='btn'><i class='glyphicon glyphicon-download-alt'></i></a>
+                        <a href='{% url 'report_realtime' report.id %}' class='btn'><i class='glyphicon glyphicon-info-sign'></i></a>
+                        <a href='{% url 'generate_report' report.id %}' class='btn'><i class='glyphicon glyphicon-play'></i></a>
                         <a href='{% url 'delete_report' report.id %}' class='btn'><i class='glyphicon glyphicon-trash'></i></a>
-                        <a href='{% url 'archive_report' report.id %}' class='btn'><i class='glyphicon glyphicon-compressed'></i></a>
                     </td>
                 </tr>
                 {% endfor %}

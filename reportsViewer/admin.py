@@ -4,6 +4,7 @@ from reportsViewer.models import Report, ReportArchive, UserReport, UserReportAr
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',),
                             'dir': ('name',),
+                            'birt_dir': ('name',),
                             'archive_dir': ('name',)}
 
 # Register your models here.

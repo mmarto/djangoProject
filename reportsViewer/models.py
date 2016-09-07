@@ -10,17 +10,21 @@ class Category(models.Model):
     name = models.CharField(max_length=500, unique=True)
     slug = models.SlugField(unique=True)
     dir = models.CharField(max_length=1500, unique=True)
+    birt_dir = models.CharField(max_length=1500, unique=True)
     archive_dir = models.CharField(max_length=1500, unique=True)
 
     def save(self, *args, **kwargs):
         slug = slugify(self.name)
         self.slug = slug
         dir = '{0}/{1}'.format(settings.REPORTS_DIR, re.sub('-', '_', slug))
+        birtDir = '{0}/birt/{1}'.format(settings.REPORTS_DIR, re.sub('-', '_', slug))
         archiveDir = '{0}/archive/{1}'.format(settings.REPORTS_DIR, re.sub('-', '_', slug))
         self.dir = dir 
+        self.birt_dir = birtDir 
         self.archive_dir = archiveDir 
         try:
             os.mkdir(dir)
+            os.mkdir(birtDir)
             os.mkdir(archiveDir)
         except:
             print('Warning: directory already exists exception')

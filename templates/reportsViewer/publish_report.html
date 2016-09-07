@@ -5,11 +5,11 @@
 {% block body_block %}
     <ol class='breadcrumb'>
         <li><a hrer='{% url 'index' %}'>Home</a></li>
-        <li class='active'>{{ 'Request Report' }}</a></li>
+        <li class='active'>{{ 'Publish Report' }}</a></li>
     </ol>
-    <h3>Request a Report</h3>
+    <h3>Publish a Report</h3>
 
-    <form id="request_report_form" method="POST" action="/reportsViewer/request_report/">
+    <form id="publish_report_form" method="POST" action="/reportsViewer/publish_report_save/">
         {% csrf_token %}
 {% comment %}
         {% for field in form.visible_fields %}
@@ -21,7 +21,7 @@
         <table class='table'>
             {{ form }}
         </table>
-        <input class='btn' type='submit' name='submit' value="Request Report"/>
+        <input class='btn' type='submit' name='submit' value="Publish Report"/>
     </form>
 
 {% endblock %}
