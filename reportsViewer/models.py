@@ -1,4 +1,5 @@
 import os, re
+import errno
 from django.db import models
 from django.contrib.auth.models import User, Group
 from django.template.defaultfilters import slugify
@@ -23,16 +24,20 @@ class Category(models.Model):
         self.birt_dir = birtDir 
         self.archive_dir = archiveDir 
         try:
-            os.mkdir(dir)
-            os.mkdir(birtDir)
-            os.mkdir(archiveDir)
-        except:
-            print('Warning: directory already exists exception')
-            pass
+            os.makedirs(dir)
+            os.makedirs(birtDir)
+            os.makedirs(archiveDir)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
+            else:
+                print('Warning: directory already exists exception')
+                pass
         super(Category, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
+
 
 class Report(models.Model):
     title = models.CharField(max_length=500, unique=True)
@@ -53,6 +58,7 @@ class Report(models.Model):
     def __str__(self):
         return self.title
 
+
 class ReportArchive(models.Model):
     title = models.CharField(max_length=500)
     path = models.CharField(default=settings.REPORTS_DIR, max_length=1000)
@@ -71,6 +77,7 @@ class ReportArchive(models.Model):
     def __str__(self):
         return self.title
 
+
 class UserReport(models.Model):
 
     user = models.ForeignKey(User)
@@ -88,6 +95,8 @@ class GroupReport(models.Model):
     def __str__(self):
         return '{} - {} '.format(self.group, self.report)
 '''
+
+
 class UserReportArch(models.Model):
 
     user = models.ForeignKey(User)
@@ -95,6 +104,7 @@ class UserReportArch(models.Model):
 
     def __str__(self):
         return '{} - {} '.format(self.user, self.report)
+
 
 class RequestReport(models.Model):
     user = models.ForeignKey(User)
