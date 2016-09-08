@@ -13,6 +13,7 @@ from reportsViewer.forms import RequestReportForm, PublishReportForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from reportsViewer.search import get_query
 from django.db.models import Count, Sum
+from django.db import connection
 
 # Create your views here.
 @login_required(login_url='/reportsViewer/login/')
@@ -306,10 +307,12 @@ def archive_report(request, report_id):
     report = Report.objects.get(id=report_id, users__id=request.user.id)
     # userReportPerm = UserReport.objects.get(user_id=request.user.id, report_id=report_id)
     userReportPerms = UserReport.objects.filter(report_id=report_id)
+    # print(UserReport.objects.filter(report_id=report_id).query)
     # print(report.category.slug, report.category.dir, report.category.archive_dir)    
     filename = os.path.basename(report.path)
     archivePath = '{0}/{1}'.format(report.category.archive_dir, filename)
     zipFileName = '{}.zip'.format(archivePath)
+    # print(archivePath)
     os.rename(report.path, archivePath)
     zf = zipfile.ZipFile(zipFileName, mode='w')
     try:
@@ -330,12 +333,14 @@ def archive_report(request, report_id):
                                     type=report.type, 
                                     comment=report.comment)
     archiveReport.save()
-    report.delete()
 
     for userReportPerm in userReportPerms:
         archiveUserReportPerm = UserReportArch(id=userReportPerm.id, user_id=request.user.id, report_id=report_id)
         archiveUserReportPerm.save(force_insert=True)
+        # print(connection.queries[-1])
         userReportPerm.delete()
+
+    report.delete()
     return HttpResponseRedirect('/reportsViewer/category/{}'.format(report.category.slug))
 
 @login_required(login_url='/reportsViewer/login/')
