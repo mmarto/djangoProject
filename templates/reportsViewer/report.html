@@ -25,10 +25,11 @@
         <tr><td>Filename</td><td><a href="{% url 'download_report' report.id %}">{{ report.path|basename }}</a></td></tr>
         <tr><td>Category</td><td>{{ report.category }}</td></tr>
         <tr><td>Comment</td><td>{{ report.comment|safe }}</td></tr>
-        <tr><td>Published date</td><td>{{ report.pub_date}}</td></tr>
-        <tr><td>Size</td><td>{{ report.size|filesizeformat}}</td></tr>
-        <tr><td>Type</td><td>{{ report.get_type_display}}</td></tr>
-        <tr><td>Creator</td><td>{{ report.creator}}</td></tr>
+        <tr><td>Published date</td><td>{{ report.pub_date }}</td></tr>
+        <tr><td>Size</td><td>{{ report.size|filesizeformat }}</td></tr>
+        <tr><td>Type</td><td>{{ report.get_type_display }}</td></tr>
+        <tr><td>Creator</td><td>{{ report.creator }}</td></tr>
+        <tr><td>Downloads</td><td>{{ report.views }}</td></tr>
         </table>
     {% else %}
         The specified report does not exist!
