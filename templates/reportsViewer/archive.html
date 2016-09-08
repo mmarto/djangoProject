@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load staticfiles %}
+{% load reportsViewer_extras %}
 
 {% block body_block %}
     <ol class='breadcrumb'>
@@ -14,6 +15,61 @@
             <li><a href="{% url 'category_archive'  category.slug %}">{{ category.name }}</a></li>
         {% endfor %}
     </ul>
+    <form class='form-inline' id='search_form' method='post' action="{% url 'archive' %}">
+        {% csrf_token %}
+        <input class='form-control' type='text' size='50' name='query' value='' id='query' />
+        <input class='btn' type='submit' name='submit' value='Search' />
+    </form>
+    <div class='panel'>
+        {% if found_entries %}
+            <div class='panel-heading'>
+                <h3>Results</h3>
+                <p>{{ found_entries.paginator.count }} reports found.</p>
+                <p class='pull-right'>Showing {{ found_entries.object_list|length }} of {{ found_entries.paginator.count }} reports.</p>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Filename</th>
+                        <th>Type</th>
+                        <th>Publish Date</th>
+                        <th>Creator</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                    {% for report in found_entries %}
+                        <tr>
+                            <td>{{ report.id}}</td>
+                            <td><a href='{% url 'report_archive' report.id %}'>{{ report.title }}</a></td>
+                            <td><a href="{% url 'category_archive' report.category.slug %}">{{ report.category.name }}</a></td>
+                            <td>{{ report.path|basename}}</td>
+                            <td>{{ report.type}}</td>
+                            <td>{{ report.pub_date }}</td>
+                            <td>{{ report.creator }}</td>
+                            <td class='text-center'>
+                                <a href='{% url 'report_archive' report.id %}' class='btn'><i class='glyphicon glyphicon-info-sign'></i></a>
+                                <a href='{% url 'download_report_archive' report.id %}' class='btn'><i class='glyphicon glyphicon-download-alt'></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+                <div class='pagination'>
+                    <span class='step-link'>
+                        {% if found_entries.has_previous %}
+                                <a href='?query={{ query_string }}&page={{ found_entries.previous_page_number }}'>previous</a>
+                        {% endif %}
+                    </span>
+                    <span class='current'>
+                        Page {{ found_entries.number }} of {{ found_entries.paginator.num_pages }}
+                    </span>
+                        {% if found_entries.has_next %}
+                            <a href='?query={{ query_string }}&page={{ found_entries.next_page_number }}'>next</a>
+                        {% endif %}
+                </div>
+        {% endif %}
+    </div>
+
 {% else %}
     <strong>There are no categories present.</strong>
 {% endif %}

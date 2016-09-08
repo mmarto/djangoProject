@@ -22,4 +22,5 @@ def get_query(query_string, search_fields):
             query = or_query
         else:
             query = query & or_query
+    print(query)
     return query

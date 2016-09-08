@@ -3,15 +3,15 @@
 {% load staticfiles %}
 {% load reportsViewer_extras %}
 
-{% block title  %}{{ 'Realtime Reports' }}{{ category_name }}{% endblock %}
+{% block title  %}{{ category_name }}{{ ' Archive' }}{% endblock %}
 
 {% block body_block %}
     <ol class='breadcrumb'>
         <li><a hrer='{% url 'index' %}'>Home</a></li>
-        <li><a hrer='{% url 'realtime_reports' %}'>Realtime Report Generation</a></li>
+        <li><a hrer='{% url 'archive' %}'>Archive</a></li>
         <li class='active'>{{ category_name }}</li>
     </ol>
-    <h3>{{ category_name }}</h3>
+    <h3>{{ category_name }}{{ ' Archive' }}</h3>
         {% if category %}
             {% if reports %}
             <table class='table table-bordered'>
@@ -27,18 +27,18 @@
                 {% comment %}<li><a href="{% url 'report' report.id %}">{{ report.title }}</a></li>{% endcomment %}
                 <tr>
                     <td>{{ report.id }}</td>
-                    <td><a href="{% url 'generate_report' report.id %}">{{ report.title }}</a></td>
+                    <td><a href="{% url 'report_archive' report.id %}">{{ report.title }}</a></td>
                     <td>{{ report.path|basename }}</td>
                     <td>{{ report.pub_date }}</td>
                     <td>{{ report.creator }}</td>
                     <td class='text-center'>
-                        <a href='{% url 'generate_report' report.id %}' class='btn'><i class='glyphicon glyphicon-download-alt'></i></a>
+                        <a href='{% url 'download_report_archive' report.id %}' class='btn'><i class='glyphicon glyphicon-download-alt'></i></a>
                     </td>
                 </tr>
                 {% endfor %}
             </table>
             {% else %}
-                <strong>No reports currently in category.</strong>
+                <strong>No reports currently in category {{ category_name }}.</strong>
             {% endif %}
         {% else %}
             The specified category {{ category_name }} does not exist!

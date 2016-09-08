@@ -1,6 +1,6 @@
 import os, re
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.template.defaultfilters import slugify
 from datetime import datetime
 from django.conf import settings
@@ -43,6 +43,7 @@ class Report(models.Model):
     creator = models.CharField(max_length=50)
     size = models.FloatField()
     users = models.ManyToManyField(User, through='UserReport')
+    # groups= models.ManyToManyField(User, through='GroupReport')
     category = models.ForeignKey(Category)
     type = models.CharField(max_length=1,
                             choices=(('P', 'Already Generated Report'), ('R', 'Real Time Manually Generated Report')),
@@ -76,15 +77,24 @@ class UserReport(models.Model):
     report = models.ForeignKey(Report)
 
     def __str__(self):
-        return '{} - {} '.format(self.user,self.report)
+        return '{} - {} '.format(self.user, self.report)
 
+'''
+class GroupReport(models.Model):
+
+    group = models.ForeignKey(Group)
+    report = models.ForeignKey(Report)
+
+    def __str__(self):
+        return '{} - {} '.format(self.group, self.report)
+'''
 class UserReportArch(models.Model):
 
     user = models.ForeignKey(User)
     report = models.ForeignKey(ReportArchive)
 
     def __str__(self):
-        return '{} - {} '.format(self.user,self.report)
+        return '{} - {} '.format(self.user, self.report)
 
 class RequestReport(models.Model):
     user = models.ForeignKey(User)

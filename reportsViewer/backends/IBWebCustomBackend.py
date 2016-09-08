@@ -1,41 +1,42 @@
 from django.contrib.auth.models import User
 import requests
 import base64
-import xml.etree.ElementTree as ET
+import json
 
 class IBWebCustomBackend:
     def authenticate(self, username=None, password=None):
+        """twiki: http://websrv3/twiki/bin/view/CustOps/IBCSProgAuthUnification"""
         
-        roleList = list()
-        errors = list()
+        #authUrl = 'http://ibop2/ibcs/tools/ums/ums_auth_app2.php'
+        authUrl = 'http://{host}:{port}/LoginApp'.format(host='ibop102', port=9009)
 
-        authUrl = 'http://ibop2/ibcs/tools/ums/ums_auth_app2.php'
+        # usermne = base64.b64encode(username.encode('utf-8')).decode('utf-8')
+        # passwd = base64.b64encode(password.encode('utf-8')).decode('utf-8')
+        usermne = username
+        passwd = password
 
-        usermne = base64.b64encode(username.encode('utf-8')).decode('utf-8')
-        passwd = base64.b64encode(password.encode('utf-8')).decode('utf-8')
+        credentials = {'user': usermne,  # userMnemonic
+                        'password': passwd,   
+                        'application': 'SkillMgmt', # applicationMnemonic
+                        'mode': None}
 
-        credentials = {'usermnemonic': usermne, 'password': passwd, 'appmnemonic': 'SkillMgmt'}
-        r = requests.get(authUrl, params=credentials)
+        r = requests.post(authUrl, params=credentials)
 
-        try:
-            root = ET.fromstring(r.text)
-            app = root.find('app')
-            if app:
-                for roleid in app.findall('approleid'):
-                    roleList.append(roleid.attrib['id'])
-            for error in root.findall('error'):
-                errors.append(error.attrib['text'])
-        except ET.ParseError as e:
-            print('Not an xml document or not well formed xml: '.format(r.text))
-            print('{}'.format(e))
+        res = json.loads(r.text)
+
+        if 'Error' in res:
+            print(res['Error'])
             return None
         
-        if len(errors) > 0:
-            print(','.join(errors))
-            return None
-        
-        if len(roleList) == 0:
-            print('No permission to access')
+        if 'LoginApp' in res:
+            if not res['LoginApp']['userAuthenticated']:
+                print("User {} doesn't exist.".format(credentials['user']))
+                return None        
+
+            if not res['LoginApp']['applicationAuthenticated']:
+                print("User {} doesn't have permissions to access {}".format(credentials['application']))
+                return None
+        else:
             return None
 
         try:
