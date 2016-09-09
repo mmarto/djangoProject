@@ -12,7 +12,15 @@
 {% else %}
 <h1>Reports Viewer says... hello world</h1>
 {% endif %}
-<p>Total Reports: {{ total_reports }}, Total Size: {{ total_size|filesizeformat }}, Total Downloads: {{ total_views }}</p>
+<div class="row">
+    <div class="col-md-3">
+        <table class="table table-bordered">
+            <tr><td>Total Reports:</td><td>{{ total_reports }}</td></tr>
+            <tr><td>Total Size:</td><td>{{ total_size|filesizeformat }}</td></tr>
+            <tr><td>Total Downloads:</td><td>{{ total_views }}</td></tr>
+        </table>
+    </div>
+</div>
 <div class="row placeholders">
     <div class="col-xs-8 col-sm-5 text-left">
         <h4>Top 5 Categories</h4>
