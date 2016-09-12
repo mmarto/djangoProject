@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse, StreamingHttpResponse
 from reportsViewer.models import Category, Report, UserReport, ReportArchive, UserReportArch
 import os
@@ -114,7 +115,7 @@ def archive(request):
 
 @login_required(login_url='/reportsViewer/login/')
 def category(request, category_name_slug, type=None):
-    print(category_name_slug,type)    
+    # print(category_name_slug,type)
     context_dict = {}
 
     try:
@@ -122,7 +123,7 @@ def category(request, category_name_slug, type=None):
         context_dict['category_name'] = category.name
 
         reports_list = Report.objects.filter(category=category, type='P', users__id=request.user.id).order_by('-pub_date')
-
+        print(Report.objects.filter(category=category, type='P', users__id=request.user.id).order_by('-pub_date').query)
         paginator = Paginator(reports_list, 15)
 
         page = request.GET.get('page')
@@ -340,6 +341,8 @@ def archive_report(request, report_id):
         # print(connection.queries[-1])
         userReportPerm.delete()
 
+    messages.success(request, '{} archived.'.format(report.title))
+
     report.delete()
     return HttpResponseRedirect('/reportsViewer/category/{}'.format(report.category.slug))
 
@@ -374,10 +377,11 @@ def user_login(request):
                 else:
                     return HttpResponseRedirect('/reportsViewer/')
             else:
-                return HttpResponse('Your Reports Viewer account is disabled.')
+                messages.warning(request, 'Your Reports Viewer account is disabled.')
+                return render(request, 'reportsViewer/login.html', {'next': next})
         else:
-            #print('Invalid login details: {}, {}'.format(username, password))
-            return HttpResponse('Invalid login details supplied.')
+            messages.warning(request, 'Invalid login details supplied.')
+            return render(request, 'reportsViewer/login.html', {'next': next})
     else:
         return render(request, 'reportsViewer/login.html', {'next': next})
 
