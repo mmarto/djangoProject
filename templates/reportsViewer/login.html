@@ -24,6 +24,13 @@
     {% endif %}
             <h2>Login to Reports Viewer</h2>
             {% csrf_token %}
+            {% block messages %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endblock messages %}
             <div class="form-group">
                 <label for="username">Username:</label>
                 <input type="text" name="username" value="" class="form-control" id="username" />
