@@ -13,6 +13,13 @@
     <!-- <h3>{{ category_name }}</h3> -->
     <a href='{% url 'category_archive' category.slug %}' class='btn'><i class='glyphicon glyphicon-compressed'></i> Go to archive</a>
         {% if category %}
+            {% block messages %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endblock messages %}
             {% if reports %}
             <table class='table table-bordered'>
                 <tr>
